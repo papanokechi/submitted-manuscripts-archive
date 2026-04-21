@@ -12,6 +12,7 @@ import json, os, pathlib, datetime
 
 SRC_DIR  = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\tex\submitted")
 REPO_DIR = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\submitted-manuscripts-archive")
+# NOTE: local clone folder kept as-is; GitHub repo is papanokechi/submitted-manuscripts
 SKIP_DIRS = {'.git', 'SCRIPTS', '__pycache__'}
 
 # Build a lookup: filename → last-modified date (from source dir)

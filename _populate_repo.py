@@ -16,6 +16,7 @@ import json, os, re, shutil, pathlib, textwrap, datetime
 # ── Paths ──────────────────────────────────────────────────────────────
 SRC_DIR   = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\tex\submitted")
 REPO_DIR  = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\submitted-manuscripts-archive")
+# NOTE: local clone folder kept as-is; GitHub repo is papanokechi/submitted-manuscripts
 LOG_FILE  = SRC_DIR / "submission_log.txt"
 MAN_DIR   = REPO_DIR  # manuscripts live at repo root
 SCRIPT_DIR = REPO_DIR / "SCRIPTS"
@@ -105,7 +106,7 @@ def find_best_pdf(entry: dict, available: dict[str, pathlib.Path]) -> pathlib.Pa
 # ── Main ───────────────────────────────────────────────────────────────
 def main():
     print("=" * 60)
-    print("  Populating submitted-manuscripts-archive")
+    print("  Populating submitted-manuscripts")
     print("=" * 60)
 
     # 1) Parse log
