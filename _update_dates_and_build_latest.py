@@ -100,7 +100,7 @@ def main():
         "",
         f"*Auto-generated — {len(manuscripts)} manuscripts*",
         "",
-        "## Latest Submissions",
+        "## All Submissions (Newest → Oldest)",
         "",
     ]
 

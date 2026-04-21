@@ -27,7 +27,7 @@ def load_log_titles(log_path: pathlib.Path) -> dict[str, str]:
 
 
 def scan_manuscripts(man_dir: pathlib.Path) -> list[dict]:
-    """Walk MANUSCRIPTS/<YEAR>/<SHORT>/ and return metadata dicts."""
+    """Walk MANUSCRIPTS/<SHORT>/ and return metadata dicts."""
     results = []
     for meta_file in sorted(man_dir.rglob("submission-metadata.json")):
         data = json.loads(meta_file.read_text(encoding="utf-8"))

@@ -157,17 +157,16 @@ def main():
     report_lines = []
 
     for entry, pdf_path, status in alignment:
-        year = entry['year']
         sn = entry['short_name']
-        dest = MAN_DIR / year / sn
+        dest = MAN_DIR / sn
         dest.mkdir(parents=True, exist_ok=True)
 
         # Copy PDF
         if pdf_path and pdf_path.exists():
             shutil.copy2(pdf_path, dest / 'manuscript.pdf')
-            report_lines.append(f"[OK] {year}/{sn}: aligned ({pdf_path.name})")
+            report_lines.append(f"[OK] {sn}: aligned ({pdf_path.name})")
         else:
-            report_lines.append(f"[MISSING PDF] {year}/{sn}: {entry['filename']}")
+            report_lines.append(f"[MISSING PDF] {sn}: {entry['filename']}")
 
         # Copy companion .tex if exists
         if pdf_path:
@@ -213,7 +212,7 @@ def main():
             continue
         # Skip if it's a companion version of an already-matched paper
         sn = kebab(uname.replace('.pdf', ''))
-        dest = MAN_DIR / '2026' / sn
+        dest = MAN_DIR / sn
         if dest.exists():
             continue
         dest.mkdir(parents=True, exist_ok=True)
@@ -233,7 +232,7 @@ def main():
         (dest / 'submission-metadata.json').write_text(
             json.dumps(meta, indent=2, ensure_ascii=False), encoding='utf-8'
         )
-        report_lines.append(f"[MISSING LOG] 2026/{sn}: {uname}")
+        report_lines.append(f"[MISSING LOG] {sn}: {uname}")
 
     # Copy the submission log itself
     shutil.copy2(LOG_FILE, REPO_DIR / 'submission_log.txt')

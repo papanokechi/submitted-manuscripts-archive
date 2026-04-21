@@ -11,13 +11,12 @@ PDFs, source files, metadata, and alignment checks — in a single place.
 
 ```
 MANUSCRIPTS/
-  <YEAR>/
-    <short-name>/
-      manuscript.pdf          ← submitted PDF
-      source.tex              ← LaTeX source (if available)
-      source.docx             ← Word source (if available)
-      submission-metadata.json← structured metadata
-      supplementary/          ← supplementary material (if any)
+  <short-name>/
+    manuscript.pdf          ← submitted PDF
+    source.tex              ← LaTeX source (if available)
+    source.docx             ← Word source (if available)
+    submission-metadata.json← structured metadata
+    supplementary/          ← supplementary material (if any)
 
 SCRIPTS/
   check-alignment.py   ← compare MANUSCRIPTS/ vs submission_log.txt
@@ -35,7 +34,7 @@ MANUSCRIPTS_INDEX.md   ← auto-generated table of all manuscripts
 1. `_populate_repo.py` parses `submission_log.txt` into structured entries.
 2. Each entry is matched to a PDF in the source directory by filename (with a
    manual map for renamed files) or by fuzzy title matching.
-3. Matched pairs are copied into `MANUSCRIPTS/<YEAR>/<short-name>/` with a
+3. Matched pairs are copied into `MANUSCRIPTS/<short-name>/` with a
    generated `submission-metadata.json`.
 4. Unmatched PDFs get placeholder metadata with `"UNKNOWN"` fields.
 5. Unmatched log entries (no PDF found) are flagged as `[MISSING PDF]`.
