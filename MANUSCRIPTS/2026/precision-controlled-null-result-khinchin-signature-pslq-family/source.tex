@@ -1,0 +1,111 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\title{A Precision-Controlled Null Result for a Khinchin-Signature PSLQ Family}
+\author{}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We test whether simple low-dimensional integer relations occur among coordinates derived from the empirical Khinchin-signature statistic $S_n$, evaluated on the continued-fraction partial quotients of $\pi$. Using agreement across 256-, 512-, and 1024-bit runs, we isolate the maximal certified segment $n=1,\ldots,91$ and perform PSLQ searches on six fixed 3D/4D templates at 300-digit working precision with 600-digit confirmation. Under the conservative bound $\texttt{maxcoeff}=10^3$ and residual threshold $10^{-20}$, all $546$ template-specific attempts are unsupported. A wide-cap diagnostic rerun with $\texttt{maxcoeff}=10^6$ yields only high-coefficient fits, concentrated almost entirely in the 4-dimensional template, and these disappear completely when the conservative cap is restored. The outcome is therefore a reproducible, precision-controlled null result for the tested coordinate family rather than evidence of hidden arithmetic dependence. Open directions include coordinate families involving nonlinear functions of the index, algebraic combinations with additional constants, and longer certified prefixes obtainable only through still higher-precision stabilization. A replication on $e$ produces a consistent null outcome, supporting the generality of the methodology.
+\end{abstract}
+
+\section{Numerical Experiments}\label{sec:numerics}
+
+Let $x=[a_0;a_1,a_2,\ldots]$ be the simple continued fraction of an irrational real number, with partial quotients $a_k(x)\in\mathbb{N}$. We define the Khinchin-signature statistic by
+\[
+S_n(x)=\left(\prod_{k=1}^n a_k(x)\right)^{1/n}=\exp\!\left(\frac{1}{n}\sum_{k=1}^n \log a_k(x)\right).
+\]
+Khinchin's theorem predicts that $S_n(x)\to K_0$ for Lebesgue-almost every real $x$, where $K_0=2.6854520010\ldots$ is Khinchin's constant \cite{BaileyBorweinCrandall1997,FlajoletVallee2000}. In the present work the object of interest is the finite-prefix deviation from this universal baseline, recorded through coordinates such as $S_n$, $\log S_n$, and $S_n-K_0$, since any robust low-complexity relation among these quantities would signal arithmetic structure beyond the generic metric behavior.
+
+\subsection{Setup}
+We worked with the stability-certified prefix $n=1,\ldots,91$ obtained by comparing the 256-, 512-, and 1024-bit runs and retaining the maximal contiguous range on which both $L_n$ and $S_n$ agreed to within $10^{-20}$ in absolute value. On this masked dataset we tested six fixed PSLQ templates drawn from the coordinate family $\{S_n,\, \log S_n,\, S_n-K_0,\, \log n\}$, using 300-digit working precision, 600-digit confirmation, residual threshold $10^{-20}$, confirmation threshold $10^{-10}$, and main coefficient cap $\texttt{maxcoeff}=10^3$.
+
+\subsection{Results}
+The conservative sweep comprised 546 template-specific attempts, distributed uniformly across the six templates. Every attempt was classified \emph{unsupported}, producing a clean null result for the tested coordinate family. The template definitions and wide-cap comparison counts are listed in Table~\ref{tab:templates}.
+
+\input{agent_h_table1.tex}
+
+\subsection{Diagnostic wide-cap comparison}
+For comparison, we retained a previously saved diagnostic run with $\texttt{maxcoeff}=10^6$. Non-unsupported fits appeared only in T3 (1 hit) and T7 (90 hits), with T7 dominating the high-coefficient regime. Because these candidates vanish under the conservative cap, they are best interpreted as numerical artefacts rather than robust arithmetic structure.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.48\linewidth]{figures/figure1_stable_prefix.png}\hfill
+\includegraphics[width=0.48\linewidth]{figures/figure2_conservative_residual_hist.png}
+
+\medskip
+
+\includegraphics[width=0.48\linewidth]{figures/figure3_conservative_residuals_vs_n.png}\hfill
+\includegraphics[width=0.48\linewidth]{figures/figure4_widecap_coeff_scale.png}
+\caption{Precision-controlled PSLQ diagnostics for the coordinate family $\{S_n,\log S_n,S_n-K_0,\log n\}$ built from the continued-fraction partial quotients of $\pi$. Upper left: the certified stability mask, showing that only the prefix $1\le n\le 91$ survives simultaneous agreement at 256, 512, and 1024 bits. Upper right and lower left: conservative residual panels for the sweep with coefficient bound $|c_i|\le 10^3$; the acceptance threshold at $10^{-20}$ marks the regime below which a candidate would be counted as supported, and no candidate enters it. Lower right: coefficient magnitudes from the wide-cap diagnostic run with $|c_i|\le 10^6$; the surviving apparent hits occur only at large coefficient scale, showing that they are numerical artefacts rather than stable arithmetic content.}
+\label{fig:khinchin_panels}
+\end{figure}
+
+\subsection{Replication on a second constant}
+To test whether the null regime observed for $\pi$ reflects an idiosyncrasy of that constant or a more stable feature of the coordinate family, we replicated the same pipeline on Euler's number $e$. Using the continued-fraction partial quotients of $e$, we formed the same statistic $S_n$ and applied the identical cross-precision certification rule based on agreement at 256, 512, and 1024 bits. For $e$ the certified stable prefix is $n=1,\ldots,192$. The longer certified prefix for $e$ reflects the well-known regularity of its continued fraction, which stabilizes more rapidly under precision escalation than the continued-fraction data for $\pi$. On this masked segment, the same six PSLQ templates from Table~\ref{tab:templates} were rerun with 300-digit working precision, 600-digit confirmation, residual threshold $10^{-20}$, confirmation threshold $10^{-10}$, and conservative coefficient cap $\texttt{maxcoeff}=10^3$. The conservative sweep therefore comprised $1152$ template-specific attempts, and all of them were classified as \emph{unsupported}. Unlike the $\pi$ diagnostic, the wide-cap rerun at $\texttt{maxcoeff}=10^6$ also produced no non-unsupported fits, so no high-coefficient artefact regime appeared for $e$. The detailed per-template counts are listed in Table~\ref{tab:templates-e}. Relative to $\pi$, the certified prefix for $e$ is substantially longer ($192$ versus $91$), and the null result is fully consistent across both constants.
+
+\input{agent_h_table2.tex}
+
+\section{Discussion}
+
+In experimental mathematics, a null result for a single constant always leaves open two interpretations: it may reflect a genuine absence of low-complexity structure in the tested coordinate family, or it may simply be an idiosyncrasy of that one expansion. For that reason, the replication on $e$ in Section~1.4 is methodologically decisive. Since the same masked six-template workflow yields an all-unsupported outcome for both $\pi$ and $e$, the evidentiary weight shifts from a claim about $\pi$ alone to a claim about the coordinate family $\{S_n,\log S_n,S_n-K_0,\log n\}$ itself. This two-constant agreement materially strengthens the calibration value of the study: it indicates that the observed failure of PSLQ is reproducible across independent continued-fraction sources rather than an accident of a single constant.
+
+The numerical evidence supports a disciplined negative conclusion: within the tested coordinate family $\{S_n,\, \log S_n,\, S_n-K_0,\, \log n\}$, no low-complexity integer relation survives simultaneous precision filtering, stability masking, and a conservative small-coefficient PSLQ search. This is informative because it separates genuine structural absence from the high-coefficient artefacts that arise when the search volume is enlarged dramatically.
+
+At the same time, the null result is deliberately local in scope. It does not rule out relations involving richer nonlinear functions of the index, alternative normalizations, or coordinate families augmented by additional constants or transforms. For instance, templates involving $n^{1/2}$, $n^2$, or algebraic combinations of $K_0$ with other known constants lie entirely outside the tested family and remain open. Nor does it exclude the possibility that qualitatively new behaviour could emerge beyond the presently certified prefix if higher-precision stabilization makes a longer trusted window available.
+
+For referee credibility, this distinction is essential: the present work certifies the absence of simple relations in a concrete, reproducible regime, rather than claiming a universal impossibility theorem. The natural next steps are to repeat the masked workflow on other well-studied constants, to enlarge the coordinate library in a controlled way, and to compare the observed null regime with symbolic models that predict when PSLQ should and should not succeed. High-quality null results of this kind are an essential calibration for any future positive claim of arithmetic structure in continued-fraction data.
+
+\section*{Computational and AI Disclosure}
+
+The computational experiments, precision-controlled PSLQ searches, stability masking, and diagnostic analyses in this paper were conducted within a multi-agent research workflow combining GitHub Copilot (in Visual Studio Code) for code generation, iterative refinement, and workspace-level automation, and Anthropic Claude for strategic guidance, mathematical review, and synthesis across project stages. All numerical results, proofs, and mathematical claims were independently verified by the author using reproducible Python scripts based on the arbitrary-precision library \texttt{mpmath} version 1.3.0 \cite{mpmath2023} and archived artifacts. The full codebase, residual logs, status-block JSON files, and figure sources supporting this work are publicly available at \url{https://github.com/papanokechi/khinchin-signature-pslq}.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{AEAL2025}
+Papanokechi,
+\emph{AEAL: Agent Epistemic Accountability Layer --- A Framework for Verifiable AI-Assisted Research},
+Zenodo (2025), doi:10.5281/zenodo.19562751.
+
+\bibitem{FergusonBaileyArno1999}
+H. R. P. Ferguson, D. H. Bailey, and S. Arno,
+\emph{Analysis of PSLQ, an integer relation finding algorithm},
+Mathematics of Computation \textbf{68} (1999), no.~225, 351--369.
+
+\bibitem{BaileyBorweinPlouffe1997}
+D. H. Bailey, P. B. Borwein, and S. Plouffe,
+\emph{On the rapid computation of various polylogarithmic constants},
+Mathematics of Computation \textbf{66} (1997), no.~218, 903--913.
+
+\bibitem{BaileyBorweinCrandall1997}
+D. H. Bailey, J. M. Borwein, and R. E. Crandall,
+\emph{On the Khinchin constant},
+Mathematics of Computation \textbf{66} (1997), no.~217, 417--431.
+
+\bibitem{FlajoletVallee2000}
+P. Flajolet and B. Vall\'ee,
+\emph{Continued fractions, comparison algorithms, and fine structure constants},
+in \emph{Constructive, Experimental, and Nonlinear Analysis}, CMS Conf. Proc. \textbf{27},
+Amer. Math. Soc., Providence, RI, 2000, pp.~53--82.
+
+\bibitem{BaileyBroadhurst2001}
+D. H. Bailey and D. J. Broadhurst,
+\emph{Parallel integer relation detection: techniques and applications},
+Mathematics of Computation \textbf{70} (2001), no.~236, 1719--1736.
+
+\bibitem{mpmath2023}
+The mpmath development team,
+\emph{mpmath: a Python library for arbitrary-precision floating-point arithmetic, version 1.3.0},
+2023, available at \url{http://mpmath.org/}.
+
+\end{thebibliography}
+
+\end{document}

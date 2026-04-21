@@ -1,0 +1,106 @@
+SUBMISSION SUMMARY
+
+Date: April 13, 2026
+
+Recorded Submissions
+--------------------
+1. Filename: JNTH-S-26-00605.pdf
+   Title: PSL2(Z) and a Four-Tier Obstruction Hierarchy in the Spectral Theory of Polynomial Continued Fractions
+   Status: Submitted to Journal of Number Theory (JNT)
+   Submission ID: JNTH-D-26-00480
+
+2. Filename: manuscript-r0.pdf
+   Title: Ratio universality for Meinardus-class partition functions and the G-01 law
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 260636324
+
+3. Filename: manuscript-r0 (1).pdf 
+   Title: Arithmetic Sector Bifurcation in Quadratic Continued Fractions: A Formalized Study of the Wallis--PCF Family
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 266535114
+
+4. Filename: manuscript-r0 (2).pdf
+   Title: Spectral Classes of Polynomial Continued Fractions: A Hypergeometric Framework and Arithmetic Obstructions
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 268704746
+
+5. Filename: pcf_unified_arxiv.pdf
+   Title: PolynomialContinuedFractions: a ProvedLogarithmicLadder, a4/πCasoratianIdentity,and482IrrationalConstants
+   Status: Submitted to Zenodo
+   Submission ID: DOI 10.5281/zenodo.19491767
+
+6. Filename: paper14-ratio-universality-SUBMISSION.pdf
+   Title: Ratio Universality for Meinardus-Class Partition Functions
+   Status: Submitted to Zenodo
+   Submission ID: DOI 10.5281/zenodo.19491666
+
+7. Filename: ai-behavior-science-v1.0.pdf
+   Title: AI Behavior Science — Founding Territory Paper  
+   Status: Published on Zenodo
+   Submission ID: DOI 10.5281/zenodo.19562751
+
+8. Filename: AEAL_Framework_v1_Draft.pdf
+   Title: AEAL: Agent Epistemic Accountability Layer 
+   Status: Published on Zenodo
+   Submission ID: 10.5281/zenodo.19565086
+
+9. Filename: ZTEK_Paper9_v2.pdf
+   Title: ZTEK: A Zero Trust Epistemic Kernel for AI-Assisted Research Workflows  
+   Status: Published on Zenodo
+   Submission ID: DOI 10.5281/zenodo.19591564
+
+10. Filename: CMF_Paper10_v2.pdf
+   Title: From Awareness to Institutionalization: A Change Management Framework for Organizational AI Epistemic Governance  
+   Status: Published on Zenodo
+   Submission ID: DOI 10.5281/zenodo.19591685
+
+11. Filename: khinchin_signature_expmath_note.pdf
+   Title: A Precision-Controlled Null Result for a Khinchin-Signature PSLQ Family  
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 264514392
+
+12. Filename: rigidity_entropy_expmath_article.pdf
+   Title: Finite-Depth Transient Rigidity in Small-Value Continued Fraction Dynamics  
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 263513140
+
+13. Filename: pcf_unified_expmath_submission.pdf
+   Title: PolynomialContinuedFractions: aProvedLogarithmicLadder,a4/πCasoratianIdentity,and482IrrationalConstants  
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 266999523
+
+14. Filename: manuscript.pdf
+   Title: SIARC: A Mechanized Safety–Stability–Controllability Framework for Semilinear Parabolic PDE Systems in Lean4  
+   Status: Submitted to Journal of Automated Reasoning (Rejected: wrong journal)
+   Submission ID: 265340205
+
+15. Filename: pcf_desert_negative_result.pdf
+   Title: SIARC: A COMPUTATIONAL VERIFICATION OF THE POLYNOMIAL CONTINUED FRACTION DESERT AT DEGREE PROFILES (4,3) AND (5,3)  
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 267262713
+
+16. Filename: pcf_rational_contamination_2026.pdf
+   Title: TRIVIAL RATIONAL CONTAMINATION IN PSLQ-BASED POLYNOMIAL CONTINUED FRACTION SEARCHES: DIAGNOSIS, CORRECTION, AND A PRE-SCREENING PROTOCOL 
+   Status: Submitted to Experimental Mathematics
+   Submission ID: 261945835
+
+17. Filename: vquad_resurgence_SUBMISSION.pdf
+   Title: Painlevé III(D6) and resurgence for a constant from a quadratic polynomial continued fraction
+   Status: Submitted to Nonlinearity
+   Submission ID: NON-110708
+
+18. Filename: ai_discovery_notices_SUBMISSION.pdf
+   Title: From False Positive to Painlevé Transcendent: AI-Assisted Discovery in Experimental Number Theory
+   Status: Submitted to Notices
+   Submission ID: 260421-Papanokechi
+
+19. Filename: area2_selfadjoint_pcf_SUBMISSION.pdf
+   Title: SELF-ADJOINTSTRUCTUREOFPOLYNOMIAL CONTINUEDFRACTIONRECURRENCES ANDITSARITHMETICCONSEQUENCES
+   Status: Submitted to Journal of Differential Equations
+   Submission ID: JDEQ26-983
+
+Note:
+This submission record contains the formal AI Disclosure regarding the use of GitHub Copilot and Anthropic Claude as used in the SIARC v6.5 research chain.
+
+
+https://orcid.org/0009-0000-6192-8273

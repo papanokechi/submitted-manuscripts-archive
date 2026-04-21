@@ -1,0 +1,20 @@
+Title:
+Arithmetic Sector Bifurcation in Quadratic Continued Fractions: A Formalized Study of the Wallis--PCF Family
+
+Authors:
+Papanokechi
+
+Primary MSC:
+11A55
+
+Secondary MSC:
+11J70, 11Y60, 33B15, 33C20
+
+Keywords:
+polynomial continued fractions, generalized continued fractions, hypergeometric functions, Clausen identity, modular forms, Gamma function, irrationality, PSLQ.
+
+Abstract:
+We develop a two-level classification of polynomial continued fractions by a universal Archimedean transfer law and a local arithmetic signature (Conjecture B). This survey develops that proposal across five recent manuscripts. Ratio universality for Meinardus-class partition functions first identifies a macro-spectral law whose leading coefficient is independent of family-specific data. Arithmetic topology then shows that this law is degenerate as a classifier: families with identical coarse invariants can occupy distinct arithmetic sectors. Our main synthesis theorem is a three-sector decomposition of the PCF landscape into logarithmic families, Wallis-Gamma/pi families, and a V-Quad sector detected by congruence obstruction and weak lifting stability. The formal backbone is provided by the WallisFamily Lean 4 package (modules ShiftConsistency and CasoratianPi4), which verifies the shift operator transport and Casoratian bridge with no sorry placeholders. Borel regularization and Stokes-connection diagnostics suggest that the V-Quad archipelago marks the boundary of classical closed-form behavior.
+
+Comments:
+21 pages, 4 tables, computational data available at https://github.com/ramanujan-breakthrough/ramanujan-breakthrough-generator. Ancillary file: extended degree-3 and degree-4 scan data (ancillary_note.pdf). Submitted to Experimental Mathematics.

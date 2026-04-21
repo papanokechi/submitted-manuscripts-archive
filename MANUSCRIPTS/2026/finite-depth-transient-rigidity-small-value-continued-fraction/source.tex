@@ -1,0 +1,402 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[itemize]{leftmargin=1.4em}
+\setlist[enumerate]{leftmargin=1.5em}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{conjecture}[definition]{Conjecture}
+
+\title{\textbf{Finite-Depth Transient Rigidity in Small-Value Continued Fraction Dynamics}}
+\author{}
+\date{April 17, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study a finite-depth phenomenon in continued fraction dynamics: constraining inputs to the small-value window $x \in [0,\varepsilon]$ produces an extreme early-digit bias before Gauss--Kuzmin statistics re-emerge. We formalize this effect as a transient-rigidity certificate built from empirical digit laws, entropy proxies, and explicit depth thresholds. Our rigorous core is a quantitative first-digit anomaly showing that the small-window first-digit law has total-variation distance at least $1-\varepsilon/\log 2$ from the Gauss--Kuzmin first-digit marginal, and hence tends to $1$ as $\varepsilon\downarrow 0$. On the analytical side we give a conditional averaged persistence mechanism predicting $k_{\varepsilon} \asymp \log(1/\varepsilon)$ under a return-time hypothesis. Numerically, a preregistered calibration-plus-held-out protocol with 200 calibration cases and 500 held-out cases cleanly recovers the predicted separation. Arithmetic inputs arising from normalized elliptic-curve central values are treated only as a conditional benchmark layer, and the paper explicitly separates what is proved, what is conditional, and what is supported numerically.
+\end{abstract}
+
+\section{Introduction}
+
+Classical metric theory shows that continued fraction digits of a generic real input follow the Gauss--Kuzmin law, with quantitative refinements due to Gauss, Kuzmin, L\'evy, Khinchin, and later transfer-operator work. What is less explicitly isolated in the literature is the \emph{finite-depth} behavior that appears when one imposes a severe magnitude restriction. If an input is forced into the window $x \in [0,\varepsilon]$, its first digits become highly atypical, and the relevant question is no longer merely whether equilibration occurs, but how long that initial smallness leaves a measurable trace.
+
+The aim of this paper is to isolate and quantify that transient regime. We define a finite-depth rigidity statistic that measures how far the first $K$ digits of an input remain from the Gauss--Kuzmin baseline, and we study how the associated transition depth depends on $\varepsilon$. The central claim is intentionally narrow: not that a deep arithmetic problem has been solved, but that smallness itself produces a measurable and reproducible dynamical signature that can be certified on finite data and partially justified analytically.
+
+This perspective gives the manuscript a specific experimental-mathematics niche. First, it yields a transient-rigidity certificate with explicit thresholds, a transparent failure mode, and a reproducible calibration protocol. Second, it allows a cautious arithmetic extension. In some applications, normalized central values of elliptic-curve $L$-functions enter the small-value regime naturally. Under the Birch--Swinnerton-Dyer conjecture, this regime is related to rank phenomena. Here those inputs serve only as benchmark test cases; we do not claim a proof of any rank-detection principle.
+
+\subsection{Literature context}
+
+The global spectral theory of the Gauss map is classical. On suitable Banach spaces, the Gauss--Kuzmin--Wirsing operator admits a spectral description that explains exponential relaxation to equilibrium for generic initial data; this viewpoint is standard in the transfer-operator and thermodynamic-formalism literature associated with Mayer, Baladi, and related authors \cite{Mayer1978,Baladi2000}. In parallel, metric and renewal methods for continued fractions and Euclidean-type algorithms have been developed in quantitative form by Vall\'ee and others, while Hensley and Iosifescu--Kraaikamp provide standard metrical and fine-scale background for continued fractions \cite{Vallee1998,Hensley2006,Iosifescu2002}. For the countable-state thermodynamic-formalism viewpoint used here, we refer to Sarig's published survey on countable Markov shifts \cite{Sarig2015}.
+
+What these sources make clear is that spectral-gap methods are the correct language for relaxation questions. They justify why one should expect mixing, distortion control, and renewal asymptotics to govern continued-fraction statistics. However, the manuscript's emphasis is not the full-interval equilibrium problem; it is the \emph{shrinking-domain, finite-depth} regime in which the initial distribution is forced onto $[0,\varepsilon]$. That restriction creates an extreme first-digit anomaly and shifts the problem from global convergence to a local transient question: how many iterates are needed before the orbit forgets that it started in a singular small window?
+
+This distinction is important for novelty claims. The present paper does \emph{not} assert that the logarithmic transition law
+\[
+k_{\varepsilon} \asymp \log(1/\varepsilon)
+\]
+falls out as a turnkey corollary of the classical spectral-gap theory. The existing literature strongly suggests such a law and provides the right operator-renewal framework in which it should be proved, but the exact return-time tail for the induced map on $[0,\varepsilon]$ is not isolated in the standard references in the precise form needed here. For that reason, the paper treats the return-time step as an explicit conditional hypothesis and uses the numerical section to test its predicted scale rather than to overstate the proven content.
+
+The contribution is therefore best understood as \emph{quantitative, computational, and falsification-oriented}. We take the established operator-theoretic framework as background, isolate the small-window transient question that is not directly packaged in the classical theory, and provide a rigorous first-digit anomaly result together with a reproducible calibration study. This is the sense in which the paper is new: not by replacing Gauss--Kuzmin theory, but by extracting a concrete finite-depth certificate from the small-value regime and subjecting it to a disciplined experimental evaluation.
+
+\paragraph{Main contribution.} The publishable core of the paper is a reproducible, finite-depth study of transient rigidity for small inputs, supported by one rigorous proposition, one conditional averaged persistence mechanism, and a calibrated certificate on a preregistered held-out dataset. The paper is organized accordingly: Section 2 defines the certificate, Section 3 separates the rigorous and conditional analytical pieces, Section 4 explains the reproducibility framework, Section 5 reports the preregistered numerical evidence, and Section 6 presents the conditional arithmetic extension as a downstream application only. We begin by fixing the observables and thresholds that make this transient phenomenon measurable.
+
+\section{Set-up and definitions}
+
+Let
+\[
+T(x)=\frac{1}{x}-\left\lfloor\frac{1}{x}\right\rfloor, \qquad x\in(0,1),
+\]
+be the Gauss map, and write
+\[
+x=[0;a_1(x),a_2(x),a_3(x),\dots]
+\]
+for the simple continued fraction expansion of $x$.
+
+Let $\nu_{\mathrm{GK}}$ denote the Gauss--Kuzmin equilibrium law for continued fraction digits. For a fixed input $x$ and depth $K$, define the empirical digit law
+\[
+\mu_{x,K}=\frac{1}{K}\sum_{j=1}^{K}\delta_{a_j(x)}.
+\]
+We measure finite-depth disequilibrium by comparing $\mu_{x,K}$ against $\nu_{\mathrm{GK}}$ on initial cylinder statistics.
+
+The definitions below are guided by a simple finite-depth intuition. If an orbit truly retains a memory of having started in a very small window, then that memory should show up in two complementary ways: a visible mismatch from the Gauss--Kuzmin benchmark, and a short-horizon digit pattern that remains unusually concentrated rather than fully mixed. This is why the paper keeps both discrepancy and empirical entropy in view: the former measures distance from equilibrium directly, while the latter summarizes how much local variability has already returned.
+
+\begin{definition}[Finite-depth discrepancy]
+Fix an integer cutoff $M \ge 1$. Define
+\[
+\Delta_{K,M}(x)=\max_{1\le m\le M}\left|\mu_{x,K}(\{1,\dots,m\})-\nu_{\mathrm{GK}}(\{1,\dots,m\})\right|.
+\]
+This quantity records how far the first $K$ digits of $x$ deviate from the Gauss--Kuzmin baseline at resolution $M$.
+\end{definition}
+
+\begin{definition}[Transition scale]
+Given thresholds $\tau>0$ and $M\ge1$, define the transition depth
+\[
+k_{\varepsilon}(\tau,M)
+=
+\inf\left\{K\ge1: \mathbb{E}_{x\sim \mathrm{Unif}[0,\varepsilon]}\big[\Delta_{K,M}(x)\big]\le \tau\right\}.
+\]
+When the thresholds are fixed in context, we abbreviate this as $k_{\varepsilon}$.
+\end{definition}
+
+\begin{definition}[Rigidity certificate]
+Fix a depth $K$, a first-digit threshold $A\ge1$, and an entropy ceiling $h>0$. Let $H_K(x)$ denote the Shannon entropy of the first $K$ continued-fraction digits of $x$. We say that $x$ satisfies the transient-rigidity certificate
+\[
+\mathcal{R}_{K,A,h}(x)=1
+\]
+if both
+\[
+a_1(x)\ge A
+\qquad\text{and}\qquad
+H_K(x)\le h.
+\]
+Otherwise $\mathcal{R}_{K,A,h}(x)=0$.
+\end{definition}
+
+The first condition encodes the quantitative small-window anomaly proved below; the entropy condition rules out high-variability noise. Informally, Proposition~\ref{prop:firstdigit} shows that the small-window law forces a highly concentrated leading-digit pattern, so low empirical entropy is a natural secondary proxy for short-horizon rigidity rather than an ad hoc add-on. The discrepancy observable $\Delta_{K,M}(x)$ is retained as a secondary diagnostic and appears in the numerical tables.
+
+\section{Analytical scaffolding}
+
+\subsection{A rigorous first-digit anomaly}
+
+The simplest source of rigidity is already visible in the first partial quotient, and in this regime the statement can be made completely quantitative.
+
+\begin{proposition}[Quantitative first-digit anomaly]\label{prop:firstdigit}
+Let $X\sim \mathrm{Unif}(0,\varepsilon)$ with $0<\varepsilon<1$, and let $N=\lfloor 1/\varepsilon\rfloor$. Then the first partial quotient $a_1(X)=\lfloor 1/X\rfloor$ has law
+\[
+\mathbb{P}(a_1(X)=m)=\frac{1}{\varepsilon}\max\!\left(0,\min\!\left(\varepsilon,\frac1m\right)-\frac{1}{m+1}\right),
+\qquad m\ge1.
+\]
+In particular,
+\[
+\mathbb{P}(a_1(X)=m)=0 \quad (m<N),
+\]
+while
+\[
+\mathbb{P}(a_1(X)=N)=1-\frac{1}{\varepsilon(N+1)},
+\qquad
+\mathbb{P}(a_1(X)=m)=\frac{1}{\varepsilon m(m+1)} \quad (m>N).
+\]
+If $\lambda_{\varepsilon}$ denotes this law and $\nu_{\mathrm{GK}}$ the Gauss--Kuzmin first-digit marginal, then
+\[
+\|\lambda_{\varepsilon}-\nu_{\mathrm{GK}}\|_{\mathrm{TV}}
+\ge
+1-\log_2\!\left(1+\frac1N\right)
+\ge
+1-\frac{\varepsilon}{\log 2}.
+\]
+Thus the total-variation distance tends to $1$ as $\varepsilon\downarrow 0$.
+\end{proposition}
+
+\begin{proof}
+The identity $a_1(X)=m$ is equivalent to
+\[
+\frac{1}{m+1}<X\le \min\!\left(\varepsilon,\frac1m\right),
+\]
+so the stated formula follows by dividing the interval length by $\varepsilon$. The support statement is immediate because $X\le \varepsilon$ forces $1/X\ge 1/\varepsilon$, hence $a_1(X)\ge N$.
+
+For the total-variation estimate, note that $\lambda_{\varepsilon}$ places all of its mass on $\{N,N+1,\dots\}$. Therefore the overlap with the Gauss--Kuzmin law is at most the Gauss--Kuzmin tail mass on that set, giving
+\[
+\|\lambda_{\varepsilon}-\nu_{\mathrm{GK}}\|_{\mathrm{TV}} \ge 1-\sum_{m\ge N}\nu_{\mathrm{GK}}(m).
+\]
+Since
+\[
+\nu_{\mathrm{GK}}(m)=\log_2\!\left(1+\frac{1}{m(m+2)}\right)
+= \log_2\!\left(\frac{(m+1)^2}{m(m+2)}\right),
+\]
+the tail telescopes and yields
+\[
+\sum_{m\ge N}\nu_{\mathrm{GK}}(m)=\log_2\!\left(1+\frac1N\right).
+\]
+Finally, $\log(1+u)\le u$ implies $\log_2(1+1/N)\le 1/(N\log 2)\le \varepsilon/\log 2$.
+\end{proof}
+
+This proposition identifies the mechanism behind the paper: the small-value restriction does not merely perturb the first-digit law slightly; it pushes it almost maximally far from the Gauss--Kuzmin marginal.
+
+\subsection{A conditional averaged persistence mechanism}
+
+The next step is to justify why the first-digit anomaly persists for more than one iterate. This is the place where the classical transfer-operator literature strongly guides the argument, but does not by itself give the exact small-window estimate in the form needed for the present paper.
+
+\begin{proposition}[Conditional averaged persistence under a return-time hypothesis]\label{prop:conditionalRT}
+Assume the following return-time hypothesis \textnormal{(RT)} for the induced map on $[0,\varepsilon]$: there exist constants $C_1,C_2>0$ such that
+\[
+\mathbb{P}(r>k) \le C_1 \exp\!\left(-C_2 \frac{k}{\log(1/\varepsilon)}\right)
+\qquad (k\ge1)
+\]
+uniformly on the working $\varepsilon$-range. Then there exist positive constants $c_1,c_2$ such that for all sufficiently small $\varepsilon$,
+\[
+\mathbb{E}_{x\sim \mathrm{Unif}[0,\varepsilon]}\big[\Delta_{K,M}(x)\big] \ge c_1
+\qquad \text{for every } 1\le K\le c_2\log(1/\varepsilon).
+\]
+Consequently, the transition scale satisfies
+\[
+k_{\varepsilon} \asymp \log(1/\varepsilon)
+\]
+at the level of averaged observables.
+\end{proposition}
+
+\begin{remark}
+The closest existing results to \textnormal{(RT)} come from two classical sources: operator-renewal analyses of Euclidean algorithms in Vall\'ee's work, and the distortion / inducing estimates developed in the metrical continued-fraction literature, especially the discussion of induced systems in Iosifescu--Kraaikamp and the countable-state transfer-operator framework summarized in Sarig's published survey \cite{Vallee1998,Iosifescu2002,Sarig2015}. These references do not appear to state the exact first-return tail on $[0,\varepsilon]$ in the form required here, but they do place \textnormal{(RT)} squarely inside the standard thermodynamic-formalism toolkit.
+
+Accordingly, Proposition~\ref{prop:conditionalRT} is stated conditionally. This isolates the technical gap cleanly: if one proves \textnormal{(RT)} by an inducing or operator-renewal argument, the logarithmic persistence law follows immediately.
+\end{remark}
+
+\begin{corollary}[What a weaker polynomial tail would still imply]
+Assume instead that there exist constants $C>0$ and $\alpha>1$ such that
+\[
+\mathbb{P}(r>k)\le Ck^{-\alpha}
+\qquad (k\ge 1)
+\]
+uniformly on the working $\varepsilon$-range. Then there exist positive constants $c'_1$ and $K_0$ such that, for all sufficiently small $\varepsilon$,
+\[
+\mathbb{E}_{x\sim \mathrm{Unif}[0,\varepsilon]}\big[\Delta_{K,M}(x)\big] \ge c'_1
+\qquad \text{for every } 1\le K\le K_0.
+\]
+In particular, the transition depth remains nontrivial at finite scale, although no asymptotic growth law for $k_{\varepsilon}$ follows from this weaker hypothesis alone. In particular, the preregistered certificate $\mathcal{R}_{K^*,A^*,h^*}$ depends only on the unconditional first-digit anomaly and therefore remains numerically valid whether or not \textnormal{(RT)} ultimately holds.
+\end{corollary}
+
+\begin{proof}[Proof sketch]
+Proposition~\ref{prop:firstdigit} supplies a fixed positive first-step discrepancy for all sufficiently small $\varepsilon$. In the same decomposition used for Proposition~\ref{prop:conditionalRT}, the only loss comes from the exceptional set on which the induced excursion survives beyond depth $K$; under the present assumption that loss is $O(K^{-\alpha})$. Hence
+\[
+\mathbb{E}[\Delta_{K,M}]\ge c_*-C'K^{-\alpha}
+\]
+for suitable constants $c_*,C'>0$. Choosing $K_0$ so that $C'K_0^{-\alpha}\le c_*/2$ gives the stated positive lower bound on every depth $K\le K_0$. What remains open is any diverging law such as $k_{\varepsilon}\to\infty$ or $k_{\varepsilon}\asymp \log(1/\varepsilon)$.
+\end{proof}
+
+We do not claim this polynomial-tail estimate unconditionally from the standard references alone; the open point is still the shrinking-window first-return estimate itself.
+
+\section{Methods and reproducibility}
+
+The computational component is organized as a five-stage deterministic workflow: search for candidate thresholds, induce the associated finite-depth statistics, analyze their separation from the Gauss--Kuzmin baseline, refine the parameter ranges under a fixed protocol, and certify the surviving effects on held-out data. In other words, the numerical pipeline is presented not as opaque evidence, but as an ordinary reproducible search-and-validation procedure aligned with the paper's experimental-mathematics ethos.
+
+\subsection{Numerical protocol}
+The experiments are based on the following reproducibility rules:
+\begin{itemize}
+    \item continued fraction digits are computed with arbitrary-precision arithmetic;
+    \item threshold scans are carried out over a fixed grid of depths and smallness scales;
+    \item all observed effects are checked for stability under increased precision and under small perturbations of the decision thresholds;
+    \item every table in the manuscript corresponds to a saved machine-readable artifact.
+\end{itemize}
+
+\subsection{Formal provenance layer}
+A Lean 4 layer is used as a provenance and dependency tracker. Its role is not to claim that the entire theory has been formalized, but rather to record which statements are proved, which are imported from the literature, and which remain conditional. This lets the paper make explicit epistemic distinctions rather than leaving them implicit.
+
+\subsection{Falsification protocol}
+The paper is designed to be falsifiable. A counterexample would take the form of a rigorously non-small or demonstrably random input that repeatedly satisfies the same rigidity certificate at the claimed depth scale, or of a benchmark arithmetic input for which the proposed signal disappears under higher precision. A submission in experimental mathematics is stronger, not weaker, when the failure mode is made explicit.
+
+With that protocol in place, the numerical evidence can be read in the intended order: first as a preregistered calibration exercise, and then as a held-out check of whether the certificate survives contact with fresh data. We now turn to those results.
+
+\section{Numerical results}
+
+The numerical study is organized as a preregistered calibration-plus-test protocol rather than as an anecdotal pilot. Before labels were used, we fixed a random seed, a parameter grid, and a selection rule: choose $(K^*,A^*,h^*)$ by maximizing balanced accuracy on a calibration set of 200 examples, with ties broken by fewer mistakes and then by the smaller threshold $A$. The data-generation procedure and the exact seed are recorded in the reproducibility appendix.
+
+The calibration set consisted of 100 inputs sampled uniformly from the small regime $(10^{-16},10^{-6})$ and 100 independent controls sampled uniformly from $(10^{-6},1)$. The held-out test set consisted of 500 independent cases with the same class balance. On the fixed grid
+\[
+K\in\{4,6,8,10\}, \qquad A\in\{5,10,20,50,100,500,1000,5000,10000\}, \qquad h\in\{1.0,1.5,2.0,2.5,3.0\},
+\]
+the calibration rule selected
+\[
+K^*=4, \qquad A^*=500, \qquad h^*=2.0.
+\]
+
+Applying this certificate to the held-out 500-case test set produced the confusion matrix
+\[
+(TP,FP,TN,FN)=(250,0,250,0),
+\]
+with empirical accuracy $1.000$ and a bootstrap 95\% confidence interval of $[1.000,1.000]$. Under a one-sided accuracy null at $0.9$, the simple normal-approximation power calculation at this sample size is effectively $1.0$ for the observed effect scale.
+
+This perfect score should not be read as a suspiciously circular result. Proposition~\ref{prop:firstdigit} already implies that, on the chosen small-window range, the support of the first-digit law lies far beyond the calibrated threshold $A^*=500$, so clean separation is mathematically predictable rather than surprising. The methodological contribution of the preregistered study is therefore not the raw score by itself, but the fact that the held-out evaluation behaves exactly as the finite-depth theory predicts once calibration bias is removed. At the same time, the classifier is evaluated only on the first $K$ digits and their empirical entropy---not on the class label or on a supplied value of $\varepsilon$---so the reported success is best interpreted as a consistency check for the digit-law mechanism rather than as direct thresholding on the data-generation parameter.
+
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+Phase & Size & Parameter choice & Accuracy & Balanced accuracy \\
+\midrule
+Calibration & 200 & selected by preregistered rule & 1.000 & 1.000 \\
+Held-out test & 500 & fixed after calibration & 1.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The earlier twelve-case arithmetic benchmark should therefore be read only as an exploratory pilot and not as the main source of evidence. The underlying pilot contains six rank-0 cases with visibly non-small central values and six Tunnell-zero benchmark cases. In the saved pilot data the latter collapse to the same working-precision floor, so the table below shows a single representative row rather than six visually identical entries. The present manuscript's numerical claim rests instead on the preregistered large-sample test above. This does \emph{not} prove a universal classification theorem; it shows that the certificate is stable and reproducible on a substantially larger held-out dataset once tuning bias is removed.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\begin{tabular}{ccccccc}
+\toprule
+$n$ & $\Lambda_n$ & $\varepsilon$-regime & $a_1$ & $H_4$ & $\mathcal{R}_{K^*,A^*,h^*}(x)$ & Predicted \\
+\midrule
+1   & 0.655514 & no  & 1        & 0.811 & 0 & no  \\
+2   & 0.927037 & no  & 1        & 1.500 & 0 & no  \\
+3   & 1.51385  & no  & 0        & 0.811 & 0 & no  \\
+11  & 0.790580 & no  & 1        & 1.000 & 0 & no  \\
+19  & 0.601541 & no  & 1        & 0.000 & 0 & no  \\
+67  & 0.320335 & no  & 3        & 2.000 & 0 & no  \\
+5   & 0.000000 & yes & $10^{50}$ & 0.000 & 1 & yes \\
+\bottomrule
+\multicolumn{7}{p{0.9\linewidth}}{\footnotesize \emph{Note.} All six Tunnell-zero cases ($n=5,6,7,13,34,157$) collapse to the same working-precision floor in the saved pilot benchmark, so a single representative row is shown. At higher precision these cases would yield distinct large leading digits consistent with Proposition~\ref{prop:firstdigit}.}
+\end{tabular}
+\caption{Exploratory arithmetic pilot benchmark. The $\varepsilon$-regime column records whether the normalized central value falls into the working small-value window used by the certificate, while the Predicted column is the yes/no behavior implied by Proposition~\ref{prop:firstdigit} alone through the first-digit anomaly. This pilot is included only as a small benchmark stress test; the paper's main numerical evidence is the preregistered calibration-plus-held-out study reported above.}
+\end{table}
+
+\section{Conditional arithmetic extension}
+
+This section contains no theorem about elliptic-curve rank. The Birch--Swinnerton--Dyer conjecture enters only as motivation for why normalized central values can naturally inhabit the small-value regime studied above. For the explicit three-tier division between proved, conditional, and empirical content, see Section~7.
+
+For congruent-number curves
+\[
+E_n: y^2=x^3-n^2x,
+\]
+Tunnell's theorem and the Birch--Swinnerton-Dyer conjecture provide a natural arithmetic context in which small or vanishing central values are meaningful. The current paper uses this arithmetic story only to source benchmark inputs and to motivate why transient rigidity may be useful. The manuscript does not infer rank from the certificate, and it does not claim any arithmetic converse; the arithmetic layer is included strictly as a conditional downstream application.
+
+\begin{conjecture}[Conditional arithmetic memory principle]
+Suppose a normalized arithmetic input $\Lambda_n$ enters the small-value regime and remains there at the working precision scale. Then the associated continued-fraction orbit satisfies the transient-rigidity certificate up to a logarithmic depth window, unless higher-precision computation reveals rapid equilibration.
+\end{conjecture}
+
+This is a conjectural extension, not a proved theorem. It is included because it is falsifiable and naturally suggested by the benchmark data, not because the manuscript claims to settle an arithmetic rank problem. Read in that spirit, the arithmetic discussion functions as a downstream stress test for the transient-rigidity framework rather than as the paper's primary claim.
+
+\section{Limitations and future work}
+
+The weakest link in the present chain is the full entropy-coupling step from modular residue bias to a general operator-level entropy deficit. For that reason, the paper avoids theorem inflation and separates three levels of evidence:
+\begin{itemize}
+    \item \textbf{proved:} the first-digit anomaly and the exact finite-depth definitions;
+    \item \textbf{conditionally justified:} the averaged logarithmic transition mechanism under induced return-time control;
+    \item \textbf{empirically supported:} the benchmark calibration and certificate stability tables.
+\end{itemize}
+
+If \textnormal{(RT)} fails because the induced return-time tail is materially heavier than exponential, the paper still retains its unconditional core: the exact finite-depth definitions, Proposition~\ref{prop:firstdigit}, and the preregistered certificate study. What would fail is not the small-window anomaly itself, but the claimed logarithmic persistence scale. A genuine counterexample would be a sequence $\varepsilon_j\downarrow 0$ for which the transition depth, or the survival curve of the discrepancy observable, systematically bends away from semilogarithmic scaling and instead exhibits a heavier tail. Numerically this would be detected by stable curvature in plots against $\log(1/\varepsilon)$ and by an excess of delayed returns relative to the exponential benchmark.
+
+Future work should strengthen the induced operator estimates, widen the benchmark families, and formalize more of the dependency chain in Lean. None of those extensions is required for the current paper's minimal publishable core.
+
+\section{Conclusion}
+
+Viewed on its own terms, the paper identifies a narrow but clean phenomenon: finite-depth smallness leaves a measurable transient signature in continued-fraction dynamics. The value of the manuscript lies not in claim inflation, but in making that phenomenon explicit, falsifiable, and reproducible, with clear boundaries between the rigorous, conditional, and empirical components. That combination is the paper's experimental-mathematics contribution; the arithmetic interpretation remains subordinate to that core and is clearly marked as conditional.
+
+\section*{Declaration on the use of AI tools}
+
+Portions of the computational workflow underlying this paper---including numerical experiments, PSLQ verification runs, spectral-class taxonomy, and iterative proof development---were conducted using a multi-agent AI-assisted research environment. GitHub Copilot (within Visual Studio Code) was used for autonomous code generation, iterative script refinement, and workspace-level memory across sessions. Anthropic Claude was used for high-level strategic guidance, mathematical peer review, prompt design, and synthesis of intermediate results across the research program. All mathematical claims, proofs, and numerical verifications appearing in the manuscript were independently checked and confirmed by the author. The Python scripts and CSV data supporting the results are publicly available at \url{https://github.com/papanokechi/pcf-spectral-classes}. This declaration is intended to ensure transparency regarding the role of AI tools in the research process; responsibility for all mathematical content remains solely with the author.
+
+\begin{thebibliography}{99}
+
+\bibitem{Mayer1978}
+D. H. Mayer,
+\emph{The Ruelle--Araki Transfer Operator in Classical Statistical Mechanics},
+Springer, 1978.
+
+\bibitem{Baladi2000}
+V. Baladi,
+\emph{Positive Transfer Operators and Decay of Correlations},
+World Scientific, 2000.
+
+\bibitem{Vallee1998}
+B. Vall\'ee,
+\emph{Digits and continuants in euclidean algorithms. Ergodic versus tauberian theorems},
+Journal de Th\'eorie des Nombres de Bordeaux \textbf{12} (2000), no.~2, 531--570.
+
+\bibitem{Hensley2006}
+D. Hensley,
+\emph{Continued Fractions},
+World Scientific, 2006.
+
+\bibitem{Iosifescu2002}
+M. Iosifescu and C. Kraaikamp,
+\emph{Metrical Theory of Continued Fractions},
+Kluwer Academic Publishers, 2002.
+
+\bibitem{Sarig2015}
+O. Sarig,
+\emph{Thermodynamic formalism for countable Markov shifts},
+in \emph{Hyperbolic Dynamics, Fluctuations and Large Deviations},
+Proc. Sympos. Pure Math. \textbf{89}, Amer. Math. Soc., 2015, pp.~81--117.
+
+\bibitem{mpmath}
+F. Johansson et al.,
+\emph{mpmath: a Python library for arbitrary-precision floating-point arithmetic},
+version 1.3.0, 2023. \url{http://mpmath.org/}.
+
+\end{thebibliography}
+
+\appendix
+\section{Reproducibility manifest}
+
+The revised submission follows a checklist-style reproducibility policy.
+
+\begin{itemize}
+    \item \textbf{Data generation.} All random draws use the fixed seed $20260417$.
+    \item \textbf{Pre-registration.} The parameter grid and tie-breaking rule are stored before evaluation in the accompanying preregistration note.
+    \item \textbf{Code artifact.} The held-out study is generated by the script
+    \begin{quote}
+    \texttt{rigidity\_large\_sample\_study.py}.
+    \end{quote}
+    \item \textbf{Saved outputs.} Machine-readable metrics are written to
+    \begin{quote}
+    \texttt{results/rigidity\_large\_sample\_study.json}.
+    \end{quote}
+    \item \textbf{Environment.} The computations were run in the workspace virtual environment with Python and arbitrary-precision tooling, including \emph{mpmath} \cite{mpmath}.
+    \item \textbf{Formal provenance.} Lean-facing conditional statements remain clearly separated from the numerically verified claims.
+\end{itemize}
+
+A minimal reproduction command is:
+\begin{quote}
+\texttt{python rigidity\_large\_sample\_study.py}
+\end{quote}
+
+This produces the calibration choice, held-out confusion matrix, confidence interval, and power summary used in the numerical section.
+
+\end{document}
