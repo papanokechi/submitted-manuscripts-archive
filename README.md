@@ -1,5 +1,13 @@
 # Submitted Manuscripts
 
+## ⭐ Featured Manuscript
+**Resurgence Structure of Quadratic Polynomial Continued Fractions**
+[PDF](painlev-iiid6-resurgence-constant-quadratic-polynomial/manuscript.pdf) • [Folder](painlev-iiid6-resurgence-constant-quadratic-polynomial/)
+
+A representative submission highlighting the resurgence and asymptotic structure of quadratic polynomial continued fractions.
+
+---
+
 A version-controlled archive of all submitted research manuscripts
 by **Shunsuke Kubota**.
 
