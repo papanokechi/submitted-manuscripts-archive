@@ -11,13 +11,18 @@ Usage:
 import json, pathlib
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
-MAN  = REPO / "MANUSCRIPTS"
 OUT  = REPO / "MANUSCRIPTS_INDEX.md"
+SKIP_DIRS = {'.git', 'SCRIPTS', '__pycache__'}
 
 
 def main():
     rows = []
-    for mf in sorted(MAN.rglob("submission-metadata.json")):
+    for d in sorted(REPO.iterdir()):
+        if not d.is_dir() or d.name in SKIP_DIRS or d.name.startswith('.'):
+            continue
+        mf = d / "submission-metadata.json"
+        if not mf.exists():
+            continue
         data = json.loads(mf.read_text(encoding="utf-8"))
         rel_dir = mf.parent.relative_to(REPO).as_posix()
         rows.append({

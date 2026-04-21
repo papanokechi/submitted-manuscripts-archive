@@ -12,7 +12,7 @@ import json, os, pathlib, datetime
 
 SRC_DIR  = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\tex\submitted")
 REPO_DIR = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\submitted-manuscripts-archive")
-MAN_DIR  = REPO_DIR / "MANUSCRIPTS"
+SKIP_DIRS = {'.git', 'SCRIPTS', '__pycache__'}
 
 # Build a lookup: filename → last-modified date (from source dir)
 def build_date_lookup() -> dict[str, str]:
@@ -31,7 +31,12 @@ def main():
     # Collect all manuscripts with updated dates
     manuscripts = []
 
-    for meta_file in sorted(MAN_DIR.rglob("submission-metadata.json")):
+    for d in sorted(REPO_DIR.iterdir()):
+        if not d.is_dir() or d.name in SKIP_DIRS or d.name.startswith('.'):
+            continue
+        meta_file = d / "submission-metadata.json"
+        if not meta_file.exists():
+            continue
         data = json.loads(meta_file.read_text(encoding='utf-8'))
         orig_fn = data.get('original_filename', '')
 

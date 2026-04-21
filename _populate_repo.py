@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Populate submitted-manuscripts-archive from local manuscripts + submission log.
+Populate submitted-manuscripts from local manuscripts + submission log.
 
 This script:
   1. Parses submission_log.txt into structured entries
   2. Scans the manuscript directory for PDFs
   3. Aligns log entries ↔ PDFs (best-effort filename + title matching)
-  4. Generates MANUSCRIPTS/<YEAR>/<SHORT_NAME>/ trees with metadata JSON
+  4. Generates <SHORT_NAME>/ folders at repo root with metadata JSON
   5. Copies manuscript PDFs (and .tex/.docx sources when available)
   6. Produces an alignment report
 """
@@ -17,7 +17,7 @@ import json, os, re, shutil, pathlib, textwrap, datetime
 SRC_DIR   = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\tex\submitted")
 REPO_DIR  = pathlib.Path(r"C:\Users\shkub\OneDrive\Documents\archive\admin\VSCode\claude-chat\submitted-manuscripts-archive")
 LOG_FILE  = SRC_DIR / "submission_log.txt"
-MAN_DIR   = REPO_DIR / "MANUSCRIPTS"
+MAN_DIR   = REPO_DIR  # manuscripts live at repo root
 SCRIPT_DIR = REPO_DIR / "SCRIPTS"
 
 # ── Helpers ────────────────────────────────────────────────────────────

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-check-alignment.py – Compare MANUSCRIPTS/ tree against submission_log.txt.
+"""check-alignment.py - Compare manuscript folders against submission_log.txt.
 
 Produces a human + machine readable alignment report.
 
@@ -11,8 +10,8 @@ Usage:
 import json, pathlib, re, sys
 
 REPO   = pathlib.Path(__file__).resolve().parent.parent
-MAN    = REPO / "MANUSCRIPTS"
 LOG    = REPO / "submission_log.txt"
+SKIP_DIRS = {'.git', 'SCRIPTS', '__pycache__'}
 
 
 def load_log_titles(log_path: pathlib.Path) -> dict[str, str]:
@@ -26,13 +25,18 @@ def load_log_titles(log_path: pathlib.Path) -> dict[str, str]:
     return titles
 
 
-def scan_manuscripts(man_dir: pathlib.Path) -> list[dict]:
-    """Walk MANUSCRIPTS/<SHORT>/ and return metadata dicts."""
+def scan_manuscripts(repo_dir: pathlib.Path) -> list[dict]:
+    """Find manuscript folders (those with submission-metadata.json) at repo root."""
     results = []
-    for meta_file in sorted(man_dir.rglob("submission-metadata.json")):
+    for d in sorted(repo_dir.iterdir()):
+        if not d.is_dir() or d.name in SKIP_DIRS or d.name.startswith('.'):
+            continue
+        meta_file = d / "submission-metadata.json"
+        if not meta_file.exists():
+            continue
         data = json.loads(meta_file.read_text(encoding="utf-8"))
-        data["_dir"] = meta_file.parent
-        data["_has_pdf"] = (meta_file.parent / "manuscript.pdf").exists()
+        data["_dir"] = d
+        data["_has_pdf"] = (d / "manuscript.pdf").exists()
         results.append(data)
     return results
 
@@ -43,7 +47,7 @@ def main() -> int:
         return 1
 
     log_titles = load_log_titles(LOG)
-    manuscripts = scan_manuscripts(MAN)
+    manuscripts = scan_manuscripts(REPO)
 
     ok = miss_log = miss_pdf = field_warn = 0
     lines = []

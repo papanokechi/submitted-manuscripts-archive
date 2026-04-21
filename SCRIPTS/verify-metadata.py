@@ -15,7 +15,7 @@ Usage:
 import json, pathlib, sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
-MAN  = REPO / "MANUSCRIPTS"
+SKIP_DIRS = {'.git', 'SCRIPTS', '__pycache__'}
 
 REQUIRED_FIELDS = [
     "title", "authors", "submitted_to", "submission_date",
@@ -27,7 +27,12 @@ def main() -> int:
     errors = 0
     warnings = 0
 
-    meta_files = sorted(MAN.rglob("submission-metadata.json"))
+    meta_files = sorted(
+        d / "submission-metadata.json"
+        for d in REPO.iterdir()
+        if d.is_dir() and d.name not in SKIP_DIRS and not d.name.startswith('.')
+           and (d / "submission-metadata.json").exists()
+    )
     if not meta_files:
         print("[ERROR] No submission-metadata.json files found.")
         return 1
